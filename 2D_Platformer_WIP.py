@@ -12,20 +12,18 @@ obstical4 = drawpad.create_rectangle(130, 230, 160, 250)
 objects = [ground, obstical1, obstical2, obstical3, obstical4]
 
 player = drawpad.create_rectangle(120, 360, 130, 380, fill = 'red')
+
 ground = False
 airTime = 0
 xDir = 0
 derection = 0
 key = None
 
-def information ():
-    print 'you are the red rectangle'
-    print 'hold A or D to move leaft or right'
-    print 'use "space" to jump'
+print 'you are the red rectangle'
+print 'hold A or D to move leaft or right'
+print 'use "space" to jump'
 
-def KeyStorage (c):
-    global key
-    key = c.char
+
 
 def hop(space):
     global ground
@@ -35,9 +33,12 @@ def hop(space):
         drawpad.move(player, 0, -1)
         ground = False
 
+def KeyStorage (c):
+    global key
+    key = c.char
+
 root.bind("<Key>", KeyStorage)
 root.bind("<space>", hop)
-
 
 def KeyInput(Key):
     global key
@@ -54,7 +55,6 @@ def KeyInput(Key):
     return derection
 
 def gravity():
-    global jumped
     global airTime
     global ground
     if ground != True:
@@ -81,21 +81,22 @@ def collisionDetect ():
             if (py1 < oy2) and (py2 > oy2):
                 drawpad.move(player, 0, oy2 - py1)
                 airTime = 0
-    
+
             if (py2 >= oy1) and (py2 < oy2):
                 drawpad.move(player, 0, oy1 - py2)
                 airTime = 0
+                #xDir = 0
                 temp = True
             else:
                 ground = False
-                
+
         if (py1 > oy1 and py1 < oy2) or (py2 > oy1 and py2 < oy2):
             if px1 <= ox2 and px2 >= ox2:
                 drawpad.move(player, (ox2 - px1) + 1, 0)
-    
+
             if px2 >= ox1 and px1 <= ox1:
                 drawpad.move(player, (ox1 - px2) - 1, 0)
-    
+
         if (temp == True):
             ground = True
 
@@ -104,8 +105,9 @@ def animate():
     derection = KeyInput(key)
     drawpad.move(player,derection,0)
     collisionDetect()
-    drawpad.after(2, animate)
+    root.after(2, animate)
 
-information()
+#information()
 animate()
 mainloop()
+root.destroy()
